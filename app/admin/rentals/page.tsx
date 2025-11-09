@@ -6,6 +6,17 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import RentalTable from "@/components/rental-table"
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog"
+import { useLogout } from "@/hooks/use-logout"
 
 // Mock data
 const mockRentals = [
@@ -51,6 +62,9 @@ export default function RentalsPage() {
   const [rentals, setRentals] = useState(mockRentals)
   const [searchTerm, setSearchTerm] = useState("")
   const [filterStatus, setFilterStatus] = useState("all")
+  const [cancelDialogOpen, setCancelDialogOpen] = useState(false)
+  const [rentalToCancel, setRentalToCancel] = useState<number | null>(null)
+  const { handleLogout } = useLogout()
 
   const filteredRentals = rentals.filter((rental) => {
     const matchesSearch =
@@ -65,8 +79,15 @@ export default function RentalsPage() {
   }
 
   const handleCancelRental = (id: number) => {
-    if (confirm("Are you sure you want to cancel this rental?")) {
-      setRentals(rentals.filter((r) => r.id !== id))
+    setRentalToCancel(id)
+    setCancelDialogOpen(true)
+  }
+
+  const confirmCancel = () => {
+    if (rentalToCancel !== null) {
+      setRentals(rentals.filter((r) => r.id !== rentalToCancel))
+      setRentalToCancel(null)
+      setCancelDialogOpen(false)
     }
   }
 
@@ -93,8 +114,11 @@ export default function RentalsPage() {
             <Button variant="ghost" onClick={() => (window.location.href = "/admin/reservations")}>
               Reservations
             </Button>
+            <Button variant="ghost" onClick={() => (window.location.href = "/admin/profile")}>
+              Profile
+            </Button>
             <Button variant="ghost">Settings</Button>
-            <Button variant="ghost">Logout</Button>
+            <Button variant="ghost" onClick={handleLogout}>Logout</Button>
           </div>
         </div>
       </header>
@@ -185,6 +209,24 @@ export default function RentalsPage() {
           </CardContent>
         </Card>
       </main>
+
+      {/* Cancel Confirmation Dialog */}
+      <AlertDialog open={cancelDialogOpen} onOpenChange={setCancelDialogOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Are you sure you want to cancel this rental? This action cannot be undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel onClick={() => setRentalToCancel(null)}>Cancel</AlertDialogCancel>
+            <AlertDialogAction onClick={confirmCancel} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
+              Cancel Rental
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   )
 }

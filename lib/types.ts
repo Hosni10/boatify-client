@@ -68,3 +68,49 @@ export interface Review {
   createdAt: Date
   updatedAt: Date
 }
+
+export interface CompanyProfile {
+  _id?: string
+  companyId: string
+  companyName: string
+  description: string
+  about: string
+  phone: string
+  email: string
+  address: string
+  city: string
+  state: string
+  zipCode: string
+  country: string
+  website: string
+  operatingHours: {
+    monday: { open: string; close: string; closed?: boolean }
+    tuesday: { open: string; close: string; closed?: boolean }
+    wednesday: { open: string; close: string; closed?: boolean }
+    thursday: { open: string; close: string; closed?: boolean }
+    friday: { open: string; close: string; closed?: boolean }
+    saturday: { open: string; close: string; closed?: boolean }
+    sunday: { open: string; close: string; closed?: boolean }
+  }
+  services: string[]
+  location: {
+    marina: string
+    coordinates?: { lat: number; lng: number }
+    directions: string
+  }
+  policies: {
+    booking: string
+    cancellation: string
+    refund: string
+  }
+  safetyMeasures: string[]
+  socialMedia: {
+    facebook?: string
+    instagram?: string
+    twitter?: string
+    youtube?: string
+  }
+  photos: string[]
+  createdAt: Date
+  updatedAt: Date
+}

@@ -8,6 +8,7 @@ import { Anchor } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { useToast } from "@/hooks/use-toast"
 
 export default function SignupPage() {
   const [formData, setFormData] = useState({
@@ -17,6 +18,7 @@ export default function SignupPage() {
     confirmPassword: "",
   })
   const [isLoading, setIsLoading] = useState(false)
+  const { toast } = useToast()
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
@@ -27,12 +29,20 @@ export default function SignupPage() {
     e.preventDefault()
     
     if (formData.password !== formData.confirmPassword) {
-      alert("Passwords do not match")
+      toast({
+        variant: "destructive",
+        title: "Password mismatch",
+        description: "Passwords do not match",
+      })
       return
     }
 
     if (formData.password.length < 6) {
-      alert("Password must be at least 6 characters long")
+      toast({
+        variant: "destructive",
+        title: "Password too short",
+        description: "Password must be at least 6 characters long",
+      })
       return
     }
 
@@ -54,17 +64,28 @@ export default function SignupPage() {
       const data = await response.json()
 
       if (!response.ok) {
-        alert(data.error || "Failed to create account")
+        toast({
+          variant: "destructive",
+          title: "Sign up failed",
+          description: data.error || "Failed to create account",
+        })
         setIsLoading(false)
         return
       }
 
       // Success - redirect to login or show success message
-      alert("Account created successfully! You can now sign in.")
+      toast({
+        title: "Account created successfully!",
+        description: "You can now sign in.",
+      })
       window.location.href = "/login"
     } catch (error) {
       console.error("Signup error:", error)
-      alert("An error occurred. Please try again.")
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "An error occurred. Please try again.",
+      })
       setIsLoading(false)
     }
   }

@@ -8,11 +8,13 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import ReservationsCalendar from "@/components/reservations-calendar"
 import ReservationsSchedule from "@/components/reservations-schedule"
 import type { Booking } from "@/lib/types"
+import { useLogout } from "@/hooks/use-logout"
 
 export default function ReservationsPage() {
   const [bookings, setBookings] = useState<Booking[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [view, setView] = useState<"calendar" | "schedule">("calendar")
+  const { handleLogout } = useLogout()
 
   useEffect(() => {
     fetchBookings()
@@ -65,8 +67,11 @@ export default function ReservationsPage() {
             <Button variant="ghost" onClick={() => (window.location.href = "/admin/rentals")}>
               Rentals
             </Button>
+            <Button variant="ghost" onClick={() => (window.location.href = "/admin/profile")}>
+              Profile
+            </Button>
             <Button variant="ghost">Settings</Button>
-            <Button variant="ghost">Logout</Button>
+            <Button variant="ghost" onClick={handleLogout}>Logout</Button>
           </div>
         </div>
       </header>

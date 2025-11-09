@@ -3,11 +3,24 @@ import { type NextRequest, NextResponse } from "next/server"
 // Backend server URL - defaults to localhost:3001 if not set
 const BACKEND_URL = process.env.BACKEND_URL || process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:3001"
 
-// GET /api/boats - Fetch all boats
+// GET /api/company/profile - Get company profile
 export async function GET(request: NextRequest) {
   try {
+    const { searchParams } = new URL(request.url)
+    const companyId = searchParams.get("companyId")
+
+    if (!companyId) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: "Company ID is required",
+        },
+        { status: 400 },
+      )
+    }
+
     // Forward request to backend server
-    const response = await fetch(`${BACKEND_URL}/api/boats`, {
+    const response = await fetch(`${BACKEND_URL}/api/company/profile?companyId=${encodeURIComponent(companyId)}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -20,7 +33,7 @@ export async function GET(request: NextRequest) {
       return NextResponse.json(
         {
           success: false,
-          error: data.error || "Failed to fetch boats",
+          error: data.error || "Failed to get company profile",
         },
         { status: response.status },
       )
@@ -28,35 +41,34 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json(data, { status: response.status })
   } catch (error) {
-    console.error("Get boats error:", error)
+    console.error("Get company profile error:", error)
     return NextResponse.json(
       {
         success: false,
-        error: "Failed to fetch boats",
+        error: "Failed to get company profile",
       },
       { status: 500 },
     )
   }
 }
 
-// POST /api/boats - Create a new boat
+// POST /api/company/profile - Create or update company profile
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
 
-    // Validate required fields
-    if (!body.name || !body.type || !body.capacity || !body.price || !body.location) {
+    if (!body.companyId) {
       return NextResponse.json(
         {
           success: false,
-          error: "Missing required fields",
+          error: "Company ID is required",
         },
         { status: 400 },
       )
     }
 
     // Forward request to backend server
-    const response = await fetch(`${BACKEND_URL}/api/boats`, {
+    const response = await fetch(`${BACKEND_URL}/api/company/profile`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -70,7 +82,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(
         {
           success: false,
-          error: data.error || "Failed to create boat",
+          error: data.error || "Failed to create/update company profile",
         },
         { status: response.status },
       )
@@ -78,13 +90,14 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json(data, { status: response.status })
   } catch (error) {
-    console.error("Create boat error:", error)
+    console.error("Create/update company profile error:", error)
     return NextResponse.json(
       {
         success: false,
-        error: "Failed to create boat",
+        error: "Failed to create/update company profile",
       },
       { status: 500 },
     )
   }
 }
+

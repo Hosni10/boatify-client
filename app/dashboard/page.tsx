@@ -7,6 +7,7 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import BoatCard from "@/components/boat-card"
 import BookingModal from "@/components/booking-modal"
+import { useToast } from "@/hooks/use-toast"
 
 // Mock data - will be replaced with API calls
 const mockBoats = [
@@ -95,6 +96,7 @@ export default function DashboardPage() {
   const [searchTerm, setSearchTerm] = useState("")
   const [filterCapacity, setFilterCapacity] = useState(0)
   const [showBookingModal, setShowBookingModal] = useState(false)
+  const { toast } = useToast()
 
   const filteredBoats = mockBoats.filter((boat) => {
     const matchesSearch =
@@ -192,7 +194,10 @@ export default function DashboardPage() {
           onClose={() => setShowBookingModal(false)}
           onConfirm={() => {
             setShowBookingModal(false)
-            alert("Booking confirmed! Check your email for details.")
+            toast({
+              title: "Booking confirmed!",
+              description: "Check your email for details.",
+            })
           }}
         />
       )}

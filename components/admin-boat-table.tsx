@@ -4,23 +4,25 @@ import { Edit2, Trash2, CheckCircle, AlertCircle } from "lucide-react"
 import { Button } from "@/components/ui/button"
 
 interface Boat {
-  id: number
+  _id?: string
+  id?: number | string
   name: string
   type: string
   capacity: number
   price: number
   location: string
   status: "available" | "rented" | "maintenance"
-  bookings: number
-  revenue: number
+  bookings?: number
+  revenue?: number
 }
 
 interface AdminBoatTableProps {
   boats: Boat[]
-  onDelete: (id: number) => void
+  onDelete: (id: string | number) => void
+  onEdit?: (boat: Boat) => void
 }
 
-export default function AdminBoatTable({ boats, onDelete }: AdminBoatTableProps) {
+export default function AdminBoatTable({ boats, onDelete, onEdit }: AdminBoatTableProps) {
   const getStatusBadge = (status: string) => {
     const styles = {
       available: "bg-green-100 text-green-800",
@@ -52,7 +54,7 @@ export default function AdminBoatTable({ boats, onDelete }: AdminBoatTableProps)
         </thead>
         <tbody>
           {boats.map((boat) => (
-            <tr key={boat.id} className="border-b border-border hover:bg-muted/50 transition-colors">
+            <tr key={boat._id || boat.id || `boat-${boat.name}-${boat.location}`} className="border-b border-border hover:bg-muted/50 transition-colors">
               <td className="py-3 px-4 font-medium text-foreground">{boat.name}</td>
               <td className="py-3 px-4 text-muted-foreground">{boat.type}</td>
               <td className="py-3 px-4 text-muted-foreground">{boat.capacity} people</td>
@@ -65,18 +67,25 @@ export default function AdminBoatTable({ boats, onDelete }: AdminBoatTableProps)
                   {boat.status.charAt(0).toUpperCase() + boat.status.slice(1)}
                 </span>
               </td>
-              <td className="py-3 px-4 text-muted-foreground">{boat.bookings}</td>
-              <td className="py-3 px-4 font-semibold text-foreground">${boat.revenue.toLocaleString()}</td>
+              <td className="py-3 px-4 text-muted-foreground">{boat.bookings || 0}</td>
+              <td className="py-3 px-4 font-semibold text-foreground">${(boat.revenue || 0).toLocaleString()}</td>
               <td className="py-3 px-4">
                 <div className="flex gap-2">
-                  <Button size="sm" variant="ghost" className="text-primary hover:bg-primary/10">
-                    <Edit2 className="w-4 h-4" />
-                  </Button>
+                  {onEdit && (
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      className="text-primary hover:bg-primary/10"
+                      onClick={() => onEdit(boat)}
+                    >
+                      <Edit2 className="w-4 h-4" />
+                    </Button>
+                  )}
                   <Button
                     size="sm"
                     variant="ghost"
                     className="text-destructive hover:bg-destructive/10"
-                    onClick={() => onDelete(boat.id)}
+                    onClick={() => onDelete(boat._id || boat.id)}
                   >
                     <Trash2 className="w-4 h-4" />
                   </Button>

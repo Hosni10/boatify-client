@@ -8,11 +8,13 @@ import { Anchor } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { useToast } from "@/hooks/use-toast"
 
 export default function LoginPage() {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [isLoading, setIsLoading] = useState(false)
+  const { toast } = useToast()
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -33,7 +35,11 @@ export default function LoginPage() {
       const data = await response.json()
 
       if (!response.ok) {
-        alert(data.error || "Failed to sign in")
+        toast({
+          variant: "destructive",
+          title: "Sign in failed",
+          description: data.error || "Failed to sign in",
+        })
         setIsLoading(false)
         return
       }
@@ -44,11 +50,18 @@ export default function LoginPage() {
         localStorage.setItem("user", JSON.stringify(data.data))
       }
       
-      alert("Sign in successful!")
+      toast({
+        title: "Sign in successful!",
+        description: "Redirecting to admin dashboard...",
+      })
       window.location.href = "/admin"
     } catch (error) {
       console.error("Login error:", error)
-      alert("An error occurred. Please try again.")
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "An error occurred. Please try again.",
+      })
       setIsLoading(false)
     }
   }

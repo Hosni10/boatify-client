@@ -36,6 +36,7 @@ export const COLLECTIONS = {
   BOOKINGS: "bookings",
   PAYMENTS: "payments",
   REVIEWS: "reviews",
+  COMPANY_PROFILES: "company_profiles",
 }
 
 // Create indexes for better query performance

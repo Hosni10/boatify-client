@@ -7,6 +7,7 @@ import { X, Calendar, Users, AlertCircle } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
+import { useToast } from "@/hooks/use-toast"
 
 interface BookingModalProps {
   boat: {
@@ -28,6 +29,7 @@ export default function BookingModal({ boat, onClose, onConfirm }: BookingModalP
   const [fullName, setFullName] = useState("")
   const [email, setEmail] = useState("")
   const [phone, setPhone] = useState("")
+  const { toast } = useToast()
 
   const calculateDays = () => {
     if (!startDate || !endDate) return 0
@@ -42,7 +44,11 @@ export default function BookingModal({ boat, onClose, onConfirm }: BookingModalP
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     if (!startDate || !endDate || !fullName || !email || !phone) {
-      alert("Please fill in all fields")
+      toast({
+        variant: "destructive",
+        title: "Missing information",
+        description: "Please fill in all fields",
+      })
       return
     }
     onConfirm()
