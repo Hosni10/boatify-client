@@ -96,14 +96,14 @@ export default function SignupPage() {
         {/* Logo */}
         <div className="flex items-center justify-center gap-2 mb-8">
           <Anchor className="w-8 h-8 text-primary" />
-          <span className="text-2xl font-bold text-foreground">BoatFlow</span>
+          <span className="text-2xl font-bold text-foreground">Boatify</span>
         </div>
 
         {/* Signup Card */}
         <Card className="border-border">
           <CardHeader className="space-y-2">
             <CardTitle className="text-2xl">Create Your Account</CardTitle>
-            <CardDescription>Join BoatFlow and start managing your boat rental business</CardDescription>
+            <CardDescription>Join Boatify and start managing your boat rental business</CardDescription>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-4">

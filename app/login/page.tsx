@@ -72,14 +72,14 @@ export default function LoginPage() {
         {/* Logo */}
         <div className="flex items-center justify-center gap-2 mb-8">
           <Anchor className="w-8 h-8 text-primary" />
-          <span className="text-2xl font-bold text-foreground">BoatFlow</span>
+          <span className="text-2xl font-bold text-foreground">Boatify</span>
         </div>
 
         {/* Login Card */}
         <Card className="border-border">
           <CardHeader className="space-y-2">
             <CardTitle className="text-2xl">Welcome Back</CardTitle>
-            <CardDescription>Sign in to your BoatFlow account to manage your fleet</CardDescription>
+            <CardDescription>Sign in to your Boatify account to manage your fleet</CardDescription>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-4">

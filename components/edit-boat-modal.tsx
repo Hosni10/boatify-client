@@ -227,3 +227,10 @@ export default function EditBoatModal({ boat, onClose, onUpdate }: EditBoatModal
   )
 }
 
+
+
+
+
+
+
+

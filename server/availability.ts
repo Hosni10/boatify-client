@@ -124,3 +124,10 @@ export function getNextAvailableDate(boatId: string, bookings: Booking[]): Date 
 }
 
 
+
+
+
+
+
+
+

@@ -10,7 +10,7 @@ export default function LandingPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Anchor className="w-8 h-8 text-primary" />
-            <span className="text-2xl font-bold text-foreground">BoatFlow</span>
+            <span className="text-2xl font-bold text-foreground">Boatify</span>
           </div>
           <div className="flex items-center gap-4">
             <Link href="/login">
@@ -31,7 +31,7 @@ export default function LandingPage() {
               Manage Your Boat Rental Business Effortlessly
             </h1>
             <p className="text-xl text-muted-foreground mb-8 text-balance">
-              BoatFlow is the all-in-one platform for boat rental companies. Track inventory, manage bookings, and
+              Boatify is the all-in-one platform for boat rental companies. Track inventory, manage bookings, and
               maximize your fleet utilization with real-time availability.
             </p>
             <div className="flex gap-4">
@@ -57,7 +57,7 @@ export default function LandingPage() {
       {/* Features Section */}
       <section className="bg-card py-20 border-t border-border">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-4xl font-bold text-center mb-16 text-foreground">Why Choose BoatFlow?</h2>
+          <h2 className="text-4xl font-bold text-center mb-16 text-foreground">Why Choose Boatify?</h2>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
             {[
               {
@@ -101,7 +101,7 @@ export default function LandingPage() {
             Ready to Transform Your Boat Rental Business?
           </h2>
           <p className="text-primary-foreground/90 text-lg mb-8 max-w-2xl mx-auto">
-            Join hundreds of boat rental companies using BoatFlow to streamline their operations.
+            Join hundreds of boat rental companies using Boatify to streamline their operations.
           </p>
           <Link href="/signup">
             <Button size="lg" variant="secondary" className="text-lg">
@@ -117,9 +117,9 @@ export default function LandingPage() {
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <Anchor className="w-6 h-6 text-primary" />
-              <span className="font-semibold text-foreground">BoatFlow</span>
+              <span className="font-semibold text-foreground">Boatify</span>
             </div>
-            <p className="text-muted-foreground text-sm">© 2025 BoatFlow. All rights reserved.</p>
+            <p className="text-muted-foreground text-sm">© 2025 Boatify. All rights reserved.</p>
           </div>
         </div>
       </footer>
