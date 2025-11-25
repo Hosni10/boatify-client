@@ -92,51 +92,33 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Check for date conflicts
-    const startDate = new Date(body.startDate)
-    const endDate = new Date(body.endDate)
+    // Backend server URL - defaults to localhost:3001 if not set
+    const BACKEND_URL = process.env.BACKEND_URL || process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:3001"
 
-    const conflict = bookings.some((booking) => {
-      const bookingStart = new Date(booking.startDate)
-      const bookingEnd = new Date(booking.endDate)
-      return (
-        booking.boatId === body.boatId &&
-        booking.status !== "cancelled" &&
-        startDate < bookingEnd &&
-        endDate > bookingStart
-      )
+    // Forward request to backend server
+    const response = await fetch(`${BACKEND_URL}/api/bookings`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(body),
     })
 
-    if (conflict) {
+    const data = await response.json()
+
+    if (!response.ok) {
       return NextResponse.json(
         {
           success: false,
-          error: "Boat is not available for the selected dates",
+          error: data.error || "Failed to create booking",
         },
-        { status: 409 },
+        { status: response.status },
       )
     }
 
-    // TODO: Replace with MongoDB insert
-    // const result = await db.collection('bookings').insertOne(body)
-
-    const newBooking = {
-      id: bookings.length + 1,
-      ...body,
-      status: "confirmed",
-      createdAt: new Date(),
-    }
-
-    bookings.push(newBooking)
-
-    return NextResponse.json(
-      {
-        success: true,
-        data: newBooking,
-      },
-      { status: 201 },
-    )
+    return NextResponse.json(data, { status: response.status })
   } catch (error) {
+    console.error("Create booking error:", error)
     return NextResponse.json(
       {
         success: false,

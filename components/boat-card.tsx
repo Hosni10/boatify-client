@@ -1,12 +1,13 @@
 "use client"
 
+import { useState } from "react"
 import { Star, Users, MapPin } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardFooter } from "@/components/ui/card"
 
 interface BoatCardProps {
   boat: {
-    id: number
+    id: number | string
     name: string
     type: string
     capacity: number
@@ -22,11 +23,19 @@ interface BoatCardProps {
 }
 
 export default function BoatCard({ boat, onBook }: BoatCardProps) {
+  const [imageError, setImageError] = useState(false)
+  const imageSrc = imageError || !boat.image ? "/placeholder.jpg" : boat.image
+
   return (
     <Card className="overflow-hidden border-border hover:shadow-lg transition-shadow">
       {/* Image */}
       <div className="relative h-48 bg-muted overflow-hidden">
-        <img src={boat.image || "/placeholder.svg"} alt={boat.name} className="w-full h-full object-cover" />
+        <img
+          src={imageSrc}
+          alt={boat.name}
+          className="w-full h-full object-cover"
+          onError={() => setImageError(true)}
+        />
         <div className="absolute top-3 right-3 bg-primary text-primary-foreground px-3 py-1 rounded-full text-sm font-semibold">
           ${boat.price}/day
         </div>

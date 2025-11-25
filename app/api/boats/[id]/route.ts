@@ -4,9 +4,9 @@ import { type NextRequest, NextResponse } from "next/server"
 const BACKEND_URL = process.env.BACKEND_URL || process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:3001"
 
 // GET /api/boats/[id] - Fetch a specific boat
-export async function GET(request: NextRequest, { params }: { params: { id: string } }) {
+export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
-    const { id } = params
+    const { id } = await params
 
     // Forward request to backend server
     const response = await fetch(`${BACKEND_URL}/api/boats/${id}`, {
@@ -42,9 +42,9 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
 }
 
 // PUT /api/boats/[id] - Update a boat
-export async function PUT(request: NextRequest, { params }: { params: { id: string } }) {
+export async function PUT(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
-    const { id } = params
+    const { id } = await params
     const body = await request.json()
 
     // Forward request to backend server
@@ -82,9 +82,9 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
 }
 
 // DELETE /api/boats/[id] - Delete a boat
-export async function DELETE(request: NextRequest, { params }: { params: { id: string } }) {
+export async function DELETE(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
-    const { id } = params
+    const { id } = await params
 
     // Forward request to backend server
     const response = await fetch(`${BACKEND_URL}/api/boats/${id}`, {

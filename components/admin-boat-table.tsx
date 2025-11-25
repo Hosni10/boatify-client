@@ -2,23 +2,11 @@
 
 import { Edit2, Trash2, CheckCircle, AlertCircle } from "lucide-react"
 import { Button } from "@/components/ui/button"
-
-interface Boat {
-  _id?: string
-  id?: number | string
-  name: string
-  type: string
-  capacity: number
-  price: number
-  location: string
-  status: "available" | "rented" | "maintenance"
-  bookings?: number
-  revenue?: number
-}
+import type { Boat } from "@/lib/types"
 
 interface AdminBoatTableProps {
   boats: Boat[]
-  onDelete: (id: string | number) => void
+  onDelete: (id: string) => void
   onEdit?: (boat: Boat) => void
 }
 
@@ -54,7 +42,7 @@ export default function AdminBoatTable({ boats, onDelete, onEdit }: AdminBoatTab
         </thead>
         <tbody>
           {boats.map((boat) => (
-            <tr key={boat._id || boat.id || `boat-${boat.name}-${boat.location}`} className="border-b border-border hover:bg-muted/50 transition-colors">
+            <tr key={boat._id || `boat-${boat.name}-${boat.location}`} className="border-b border-border hover:bg-muted/50 transition-colors">
               <td className="py-3 px-4 font-medium text-foreground">{boat.name}</td>
               <td className="py-3 px-4 text-muted-foreground">{boat.type}</td>
               <td className="py-3 px-4 text-muted-foreground">{boat.capacity} people</td>
@@ -85,7 +73,11 @@ export default function AdminBoatTable({ boats, onDelete, onEdit }: AdminBoatTab
                     size="sm"
                     variant="ghost"
                     className="text-destructive hover:bg-destructive/10"
-                    onClick={() => onDelete(boat._id || boat.id)}
+                    onClick={() => {
+                      if (boat._id) {
+                        onDelete(boat._id)
+                      }
+                    }}
                   >
                     <Trash2 className="w-4 h-4" />
                   </Button>

@@ -8,18 +8,19 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { useToast } from "@/hooks/use-toast"
+import type { Boat } from "@/lib/types"
 
 interface BookingModalProps {
-  boat: {
-    id: number
-    name: string
-    type: string
-    capacity: number
-    price: number
-    location: string
-  }
+  boat: Boat
   onClose: () => void
-  onConfirm: () => void
+  onConfirm: (bookingData: {
+    startDate: string
+    endDate: string
+    guests: number
+    fullName: string
+    email: string
+    phone: string
+  }) => void
 }
 
 export default function BookingModal({ boat, onClose, onConfirm }: BookingModalProps) {
@@ -51,13 +52,45 @@ export default function BookingModal({ boat, onClose, onConfirm }: BookingModalP
       })
       return
     }
-    onConfirm()
+
+    // Validate dates
+    const start = new Date(startDate)
+    const end = new Date(endDate)
+    const today = new Date()
+    today.setHours(0, 0, 0, 0)
+
+    if (start < today) {
+      toast({
+        variant: "destructive",
+        title: "Invalid date",
+        description: "Start date cannot be in the past",
+      })
+      return
+    }
+
+    if (end <= start) {
+      toast({
+        variant: "destructive",
+        title: "Invalid date",
+        description: "End date must be after start date",
+      })
+      return
+    }
+
+    onConfirm({
+      startDate,
+      endDate,
+      guests,
+      fullName,
+      email,
+      phone,
+    })
   }
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
-      <Card className="w-full max-w-md border-border">
-        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4">
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50 overflow-y-auto">
+      <Card className="w-full max-w-md border-border max-h-[90vh] flex flex-col">
+        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4 flex-shrink-0">
           <div>
             <CardTitle>Book {boat.name}</CardTitle>
             <CardDescription>{boat.type}</CardDescription>
@@ -67,7 +100,7 @@ export default function BookingModal({ boat, onClose, onConfirm }: BookingModalP
           </button>
         </CardHeader>
 
-        <CardContent>
+        <CardContent className="overflow-y-auto flex-1 min-h-0">
           <form onSubmit={handleSubmit} className="space-y-4">
             {/* Dates */}
             <div className="space-y-2">
